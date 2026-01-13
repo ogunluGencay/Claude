@@ -5,8 +5,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import List, Optional
+from pathlib import Path
 import os
 
 from config import config
@@ -88,8 +90,8 @@ async def get_course_stats():
 @app.on_event("startup")
 async def startup_event():
     """Load initial documents on startup"""
-    docs_path = "../docs"
-    if os.path.exists(docs_path):
+    docs_path = Path(__file__).parent.parent / "docs"
+    if docs_path.exists():
         print("Loading initial documents...")
         try:
             courses, chunks = rag_system.add_course_folder(docs_path, clear_existing=False)
@@ -98,12 +100,6 @@ async def startup_event():
             print(f"Error loading documents: {e}")
 
 # Custom static file handler with no-cache headers for development
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-import os
-from pathlib import Path
-
-
 class DevStaticFiles(StaticFiles):
     async def get_response(self, path: str, scope):
         response = await super().get_response(path, scope)
@@ -115,5 +111,6 @@ class DevStaticFiles(StaticFiles):
         return response
     
     
-# Serve static files for the frontend
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")
+# Serve static files for the frontend (must be AFTER all API routes)
+frontend_path = Path(__file__).parent.parent / "frontend"
+app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="static")
