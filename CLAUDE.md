@@ -23,6 +23,52 @@ uv remove <package>
 
 The web interface runs at `http://localhost:8000` and API docs at `http://localhost:8000/docs`.
 
+## Testing
+
+### Test Location
+
+Tests are located in `backend/tests/` directory:
+
+```
+backend/tests/
+├── __init__.py
+├── conftest.py              # Shared fixtures (mock clients, sample data)
+├── test_ai_generator.py     # AIGenerator and Claude API tests
+├── test_api.py              # FastAPI endpoint tests
+├── test_document_processor.py # Document parsing tests
+├── test_models.py           # Data model tests
+├── test_rag_system.py       # RAGSystem integration tests
+├── test_search_tools.py     # CourseSearchTool tests
+├── test_session_manager.py  # Session management tests
+└── test_vector_store.py     # ChromaDB/VectorStore tests
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+uv run pytest
+
+# Run with coverage report
+uv run pytest --cov=backend --cov-report=term-missing
+
+# Run a specific test file
+uv run pytest backend/tests/test_api.py
+
+# Run a specific test function
+uv run pytest backend/tests/test_api.py::test_query_endpoint
+
+# Run tests with verbose output
+uv run pytest -v
+```
+
+### Test Configuration
+
+Pytest is configured in `pyproject.toml`:
+- `asyncio_mode = "auto"`: Async tests run automatically
+- `testpaths = ["backend/tests"]`: Default test directory
+- `addopts = "-v --tb=short"`: Verbose output with short tracebacks
+
 ## Environment Setup
 
 Requires a `.env` file in the root directory with:
