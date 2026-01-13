@@ -1,7 +1,7 @@
 [project]
 name = "starting-codebase"
 version = "0.1.0"
-description = "Add your description here"
+description = "Course Materials RAG System"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -13,3 +13,6 @@ dependencies = [
     "python-multipart==0.0.20",
     "python-dotenv==1.1.1",
 ]
+
+[tool.uv]
+dev-dependencies = []

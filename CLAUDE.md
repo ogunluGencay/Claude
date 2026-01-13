@@ -5,13 +5,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build and Run Commands
 
 ```bash
-# Install dependencies
+# Sync dependencies
 uv sync
 
-# Run the application (from project root)
+# Run the application (recommended - auto-syncs dependencies)
 ./run.sh
-# Or manually:
+
+# Or manually start the server
 cd backend && uv run uvicorn app:app --reload --port 8000
+
+# Add a new dependency
+uv add <package>
+
+# Remove a dependency
+uv remove <package>
 ```
 
 The web interface runs at `http://localhost:8000` and API docs at `http://localhost:8000/docs`.
